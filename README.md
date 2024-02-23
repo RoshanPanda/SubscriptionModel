@@ -1,2 +1,2 @@
 # SubscriptionModel
-a sample Demonstration using Scala and ZIO
+A sample Demonstration using Scala and ZIO
