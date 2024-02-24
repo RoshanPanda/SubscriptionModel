@@ -9,10 +9,10 @@ import zio.http.{HttpApp, SSLConfig, Server}
 
 object main extends ZIOAppDefault {
 
-  private val helthRoute = HealthRout.getRoute.toHttpApp //@@ basicAuth("admin", "admin")
+  private val helthRoute = HealthRout.getRoute.toHttpApp
   private val signUproute = SignUpRoute.getRoute.toHttpApp
 
-  val app = helthRoute ++ signUproute @@ basicAuth("admin", "admin")
+  val app: HttpApp[AtomicServices with SignUp] = helthRoute ++ signUproute @@ basicAuth("admin", "admin")
 
   private val sslConfig = SSLConfig.fromResource(
     behaviour = SSLConfig.HttpBehaviour.Accept,
@@ -26,7 +26,7 @@ object main extends ZIOAppDefault {
 
   private val configLayer = ZLayer.succeed(config)
 
-  private val signUpLayers = SignUp.live ++ AtomicServices.live //++ AtomicServices.LiveDStore
+  private val signUpLayers = SignUp.live ++ AtomicServices.live
 
-  def run = Server.serve(app).provide(Server.live,configLayer,signUpLayers)
+  def run: ZIO[Any, Throwable, Nothing] = Server.serve(app).provide(Server.live,configLayer,signUpLayers)
 }
