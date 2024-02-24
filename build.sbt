@@ -1,5 +1,5 @@
 ThisBuild / version := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "3.2.1"
+ThisBuild / scalaVersion :="2.13.6"
 ThisBuild / organization := "com.roshan"
 ThisBuild / scalacOptions ++= Seq(
   "-Xlint:unused",
@@ -14,7 +14,7 @@ lazy val versions = new {
   val zio = "2.0.2"
   val zioJson = "0.2.0-M2"
   val zioSchema = "0.4.2"
-  val zioHttp = "3.0.0-RC2"
+  val zioHttp = "3.0.0-RC3"
   val config = "3.0.7"
   val  scalatest = "3.2.17"
   val ibmMqClient = "9.1.1.0"
