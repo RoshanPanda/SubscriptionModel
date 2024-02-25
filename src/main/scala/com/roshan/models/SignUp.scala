@@ -4,6 +4,7 @@ import com.roshan.services.{AtomicServices, Inactive, State}
 import zio._
 import zio.http.{Request, Response}
 import zio.json.{DecoderOps, DeriveJsonDecoder, DeriveJsonEncoder, EncoderOps, JsonDecoder, JsonEncoder}
+import zio.stm.TRef
 
 import java.util.UUID
 
@@ -17,10 +18,10 @@ case class SignUp() {
     }
   }
 
-  def addMember(state: State): ZIO[AtomicServices, String, UUID] = for {
+  def addMember(state: State,store:Ref[Map[UUID, Option[State]]]): ZIO[AtomicServices, String, UUID] = for {
     serv <- ZIO.service[AtomicServices]
     st <- validate(state: State)
-    id <- serv.insertData(Some(st))
+    id <- serv.insertData(Some(st),store)
     _ <- ZIO.log(s"inserted data to store for id ${id}")
   } yield id
 
@@ -29,14 +30,14 @@ case class SignUp() {
 object SignUp {
   val live: ZLayer[Any, Nothing, SignUp] = ZLayer.fromFunction(SignUp.apply _)
 
-  def process(request: Request): ZIO[AtomicServices with SignUp, Nothing, Response] = {
+  def process(request: Request,store:Ref[Map[UUID, Option[State]]]): ZIO[AtomicServices with SignUp, Nothing, Response] = {
 
     val p = for {
       serv <- ZIO.service[SignUp]
       strReq <- request.body.asString
       obj <- ZIO.fromEither(strReq.fromJson[SignUpReq])
       state = State(None, obj.FirstName, obj.LastName, obj.UserName, obj.PassWord, obj.age, Some(Inactive))
-      id <- serv.addMember(state)
+      id <- serv.addMember(state,store)
     } yield id
 
     p.foldZIO(e => ZIO.succeed(Response.json(SignUpResFailure(e.toString).toJson)), id => ZIO.succeed(Response.json(SignUpResSuccess(id).toJson)))

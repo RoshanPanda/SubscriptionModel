@@ -1,15 +1,20 @@
 package com.roshan.routes
 
 import com.roshan.models.SignUp
+import com.roshan.services.State
+import zio.Ref
 import zio.http._
-case class SignUpRoute() {
-  def signup() = Routes(
+import zio.stm.{TMap, USTM}
+
+import java.util.UUID
+case class SignUpRoute(store:Ref[Map[UUID, Option[State]]]) {
+  private def signup() = Routes(
     Method.POST / "signup" -> handler {
-      req:Request => SignUp.process(req)
+      req:Request => SignUp.process(req,store)
     }
   )
 }
 
 object SignUpRoute {
-  val getRoute = SignUpRoute().signup()
+  def getRoute(store:Ref[Map[UUID, Option[State]]]) = SignUpRoute(store).signup()
 }

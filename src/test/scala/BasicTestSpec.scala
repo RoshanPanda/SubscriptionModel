@@ -2,6 +2,8 @@ import com.roshan.models.SignUpReq
 import org.scalatest.wordspec.AnyWordSpec
 import zio.json.EncoderOps
 
+import java.util.UUID
+
 class BasicTestSpec extends AnyWordSpec {
 
   "pattern test" in {
@@ -15,6 +17,16 @@ class BasicTestSpec extends AnyWordSpec {
   "json test" in {
     val req = SignUpReq("Roshan","Panda","RP","Roshan",30)
     println(req.toJson)
+    assert(true)
+  }
+
+  "test uuid" in {
+    val m:Map[UUID,String] = Map.empty
+    val id = UUID.randomUUID()
+    val n = m ++ Map(id -> "empty")
+    println(n.get(UUID.fromString(id.toString)))
+    println(n.get(id))
+    println(UUID.fromString(id.toString))
     assert(true)
   }
 
