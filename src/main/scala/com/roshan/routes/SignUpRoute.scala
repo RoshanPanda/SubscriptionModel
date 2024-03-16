@@ -4,7 +4,6 @@ import com.roshan.models.SignUp
 import com.roshan.services.{AtomicServices, State}
 import zio.Ref
 import zio.http._
-import zio.stm.{TMap, USTM}
 
 import java.util.UUID
 case class SignUpRoute(store:Ref[Map[UUID, Option[State]]]) {
