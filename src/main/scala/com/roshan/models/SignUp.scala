@@ -4,12 +4,11 @@ import com.roshan.services.{AtomicServices, Inactive, State}
 import zio._
 import zio.http.{Request, Response}
 import zio.json.{DecoderOps, DeriveJsonDecoder, DeriveJsonEncoder, EncoderOps, JsonDecoder, JsonEncoder}
-import zio.stm.TRef
 
 import java.util.UUID
 
 case class SignUp() {
-  def validate(state: State): ZIO[Any, String, State] = {
+  private def validate(state: State): ZIO[Any, String, State] = {
     val pattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{8,20}$".r
     if (pattern.matches(state.PassWord)) {
       ZIO.succeed(state)
@@ -22,7 +21,7 @@ case class SignUp() {
     serv <- ZIO.service[AtomicServices]
     st <- validate(state: State)
     id <- serv.insertData(Some(st),store)
-    _ <- ZIO.log(s"inserted data to store for id ${id}")
+    _ <- ZIO.log(s"inserted data to store for id $id")
   } yield id
 
 }

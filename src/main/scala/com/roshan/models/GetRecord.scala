@@ -1,10 +1,9 @@
 package com.roshan.models
 
 import com.roshan.services.{AtomicServices, State}
-import zio.{Ref, ZIO, ZLayer}
 import zio.http.Response
 import zio.json.{DeriveJsonDecoder, DeriveJsonEncoder, EncoderOps, JsonDecoder, JsonEncoder}
-import zio.stm.{TMap, TRef, USTM}
+import zio.{Ref, ZIO, ZLayer}
 
 import java.util.UUID
 
@@ -17,7 +16,7 @@ case class GetRecord() {
 
 object GetRecord {
 
-  val live = ZLayer.fromFunction(GetRecord.apply _)
+  val live: ZLayer[Any, Nothing, GetRecord] = ZLayer.fromFunction(GetRecord.apply _)
   def process(id: String,store:Ref[Map[UUID, Option[State]]]): ZIO[AtomicServices with GetRecord, Nothing, Response] = {
      for {
     serv <- ZIO.service[GetRecord]

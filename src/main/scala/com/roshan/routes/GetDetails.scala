@@ -1,16 +1,15 @@
 package com.roshan.routes
 
 import com.roshan.models.GetRecord
-import com.roshan.services.{State}
-import zio.http._
+import com.roshan.services.{AtomicServices, State}
 import zio._
-import zio.stm.{TMap, USTM}
+import zio.http._
 
 import java.util.UUID
 
 
 case class GetDetails(store:Ref[Map[UUID, Option[State]]]) {
-  private def getRecord() = Routes(
+  private def getRecord: Routes[AtomicServices with GetRecord, Nothing] = Routes(
     Method.GET / "getrecord" / string("id") -> handler {
       (id:String ,_:Request) =>  GetRecord.process(id,store)
     }
@@ -18,6 +17,6 @@ case class GetDetails(store:Ref[Map[UUID, Option[State]]]) {
 }
 
 object GetDetails {
-  def getRoute(store:Ref[Map[UUID, Option[State]]]) = GetDetails(store).getRecord()
+  def getRoute(store:Ref[Map[UUID, Option[State]]]): Routes[AtomicServices with GetRecord, Nothing] = GetDetails(store).getRecord
 }
 
