@@ -1,14 +1,14 @@
 package com.roshan.routes
 
 import com.roshan.models.SignUp
-import com.roshan.services.State
+import com.roshan.services.{AtomicServices, State}
 import zio.Ref
 import zio.http._
 import zio.stm.{TMap, USTM}
 
 import java.util.UUID
 case class SignUpRoute(store:Ref[Map[UUID, Option[State]]]) {
-  private def signup() = Routes(
+  private def signup: Routes[AtomicServices with SignUp, Nothing] = Routes(
     Method.POST / "signup" -> handler {
       req:Request => SignUp.process(req,store)
     }
@@ -16,5 +16,5 @@ case class SignUpRoute(store:Ref[Map[UUID, Option[State]]]) {
 }
 
 object SignUpRoute {
-  def getRoute(store:Ref[Map[UUID, Option[State]]]) = SignUpRoute(store).signup()
+  def getRoute(store:Ref[Map[UUID, Option[State]]]): Routes[AtomicServices with SignUp, Nothing] = SignUpRoute(store).signup
 }
