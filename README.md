@@ -1,5 +1,5 @@
 # SubscriptionModel
-A sample Demonstration using Scala and ZIO
+A simple Demonstration using Scala and ZIO
 
 ### SignUp
 signup valid request : 
