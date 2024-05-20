@@ -1,6 +1,7 @@
 package com.roshan.models
 
-import com.roshan.services.{AtomicServices, Inactive, State}
+import com.roshan.services.SubscriptionType.Inactive
+import com.roshan.services.{AtomicServices, State}
 import zio._
 import zio.http.{Request, Response}
 import zio.json.{DecoderOps, DeriveJsonDecoder, DeriveJsonEncoder, EncoderOps, JsonDecoder, JsonEncoder}

@@ -4,6 +4,7 @@ package com.roshan.services
 import zio.stm._
 import zio._
 import zio.json.{DeriveJsonDecoder, DeriveJsonEncoder, JsonDecoder, JsonEncoder}
+import zio.schema.{DeriveSchema, Schema}
 
 import java.util.UUID
  case class AtomicServices() { //store:TRef[Map[UUID, Option[State]]]
@@ -40,18 +41,20 @@ import java.util.UUID
 
 object AtomicServices {
 
+  implicit val schema:Schema[AtomicServices] = DeriveSchema.gen
   val live = ZLayer.fromFunction(AtomicServices.apply _ )
   //val LiveDStore: ULayer[USTM[TMap[UUID, Option[State]]]] = ZLayer.succeed(DStore)
 }
 
 
-sealed trait SubscriptionType extends Product with Serializable
+sealed trait SubscriptionType
 
-case object Active extends SubscriptionType
 
-case object Inactive extends SubscriptionType
+
 
 object SubscriptionType {
+  case object Active extends SubscriptionType
+  case object Inactive extends SubscriptionType
   implicit val encode: JsonEncoder[SubscriptionType] = DeriveJsonEncoder.gen[SubscriptionType]
   implicit val decode: JsonDecoder[SubscriptionType] = DeriveJsonDecoder.gen[SubscriptionType]
 }

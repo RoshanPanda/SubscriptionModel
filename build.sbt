@@ -20,6 +20,8 @@ lazy val versions = new {
   val ibmMqClient = "9.1.1.0"
   val jms = "1.1"
   val zioFtp = "0.4.1"
+  val caliban = "2.5.2"
+  val tapire = "1.9.4"
 }
 
 
@@ -42,6 +44,10 @@ lazy val root = (project in file("."))
       "dev.zio" %% "zio-test-junit" % versions.zio,
       //"dev.zio" %% "zio-logging" % versions.zio,
       "dev.zio" %% "zio-ftp" % versions.zioFtp,
+      "com.github.ghostdogpr" %% "caliban" % versions.caliban,
+      "com.github.ghostdogpr" %% "caliban-zio-http"   % versions.caliban,
+      "com.softwaremill.sttp.tapir"   %% "tapir-jsoniter-scala" % versions.tapire,
+      "io.circe"                      %% "circe-generic"                 % "0.14.6",
 
 
 

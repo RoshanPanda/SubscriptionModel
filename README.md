@@ -28,4 +28,16 @@ Error Response:
     "success": false
 }
 ```
+Graphql query:
+
+```agsl
+{
+    details(id: "3e6fb2ab-2fbf-48eb-b326-c973b09a1e55") {
+        FirstName
+        LastName
+    }
+}
+```
+
+![img.png](img.png)
 
